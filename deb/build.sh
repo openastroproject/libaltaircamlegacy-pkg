@@ -10,9 +10,8 @@ debdir=debian
 debsrc=$debdir/source
 quiltconf=$HOME/.quiltrc-dpkg
 
-mkdir $srcdir
-cd $srcdir
 tar zxf ../libaltaircamlegacy-$version.tar.gz
+cd $srcdir
 test -d demo && ( chmod -x demo/*.* Makefile )
 YFLAG=-y
 dh_make -v | fgrep -q '1998-2011'
@@ -20,7 +19,7 @@ if [ $? -eq 0 ]
 then
   YFLAG=''
 fi
-dh_make $YFLAG -l -f ../libaltaircamlegacy-$version.tar.gz
+dh_make $YFLAG -l -f ../../libaltaircamlegacy-$version.tar.gz
 
 cp ../debfiles/control $debdir
 cp ../debfiles/copyright $debdir
@@ -29,18 +28,17 @@ cp ../debfiles/watch $debdir
 cp ../debfiles/libaltaircamlegacy.dirs $debdir
 cp ../debfiles/libaltaircamlegacy.install $debdir
 cp ../debfiles/libaltaircamlegacy.symbols $debdir
+cp ../debfiles/libaltaircamlegacy.triggers $debdir
 cp ../debfiles/libaltaircamlegacy-dev.dirs $debdir
 cp ../debfiles/libaltaircamlegacy-dev.install $debdir
 
-echo 9 >> $debdir/compat
+echo 10 > $debdir/compat
 
 sed -e '/^.*[ |]configure./a\
-        ldconfig\
-	udevadm control --reload-rules' < $debdir/postinst.ex > $debdir/postinst
+	udevadm control --reload-rules || true' < $debdir/postinst.ex > $debdir/postinst
 chmod +x $debdir/postinst
 sed -e '/^.*[ |]remove./a\
-        ldconfig\
-	udevadm control --reload-rules' < $debdir/postrm.ex > $debdir/postrm
+	udevadm control --reload-rules || true' < $debdir/postrm.ex > $debdir/postrm
 chmod +x $debdir/postrm
 echo "3.0 (quilt)" > $debsrc/format
 

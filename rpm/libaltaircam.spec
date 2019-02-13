@@ -8,7 +8,7 @@ License:	GPLv2+
 Prefix:         %{_prefix}
 Provides:       libaltaircamlegacy = %{version}-%{release}
 Obsoletes:      libaltaircamlegacy < 1.24.11330
-Source:         libaltaircamlegacy-%{version}.tar.gz
+Source:         ../libaltaircamlegacy-%{version}.tar.gz
 Patch0:         pkg-config.patch
 
 %description
