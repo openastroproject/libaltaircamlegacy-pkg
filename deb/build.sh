@@ -10,6 +10,20 @@ debdir=debian
 debsrc=$debdir/source
 quiltconf=$HOME/.quiltrc-dpkg
 
+debversion=`cat /etc/debian_version`
+case $debversion in
+	jessie/sid)
+		compatversion=9
+		;;
+	stretch/sid)
+		compatversion=9
+		;;
+	*)
+		compatversion=10
+		;;
+esac
+echo $compatversion > debfiles/compat
+
 tar zxf ../libaltaircamlegacy-$version.tar.gz
 cd $srcdir
 test -d demo && ( chmod -x demo/*.* Makefile )
@@ -21,9 +35,10 @@ then
 fi
 dh_make $YFLAG -l -f ../../libaltaircamlegacy-$version.tar.gz
 
-cp ../debfiles/control $debdir
+sed -e "s/@@COMPAT@@/$compatversion/" < ../debfiles/control > $debdir/control
 cp ../debfiles/copyright $debdir
 cp ../debfiles/changelog $debdir
+cp ../debfiles/compat $debdir
 cp ../debfiles/watch $debdir
 cp ../debfiles/libaltaircamlegacy.dirs $debdir
 cp ../debfiles/libaltaircamlegacy.install $debdir
@@ -31,8 +46,6 @@ cp ../debfiles/libaltaircamlegacy.symbols $debdir
 cp ../debfiles/libaltaircamlegacy.triggers $debdir
 cp ../debfiles/libaltaircamlegacy-dev.dirs $debdir
 cp ../debfiles/libaltaircamlegacy-dev.install $debdir
-
-echo 10 > $debdir/compat
 
 sed -e '/^.*[ |]configure./a\
 	udevadm control --reload-rules || true' < $debdir/postinst.ex > $debdir/postinst
