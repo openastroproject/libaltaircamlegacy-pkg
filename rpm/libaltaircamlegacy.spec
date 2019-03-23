@@ -37,10 +37,12 @@ sed -e "s!@LIBDIR@!%{_libdir}!g" -e "s!@VERSION@!%{version}!g" < \
 
 %install
 mkdir -p %{buildroot}%{_libdir}/pkgconfig
+mkdir -p %{buildroot}%{_includedir}
 
 case %{_arch} in
   x86_64)
     cp linux/x64/libaltaircam.so %{buildroot}%{_libdir}/libaltaircamlegacy.so.%{version}
+		cp inc/altaircamlegacy.h %{buildroot}%{_includedir}
     ;;
   *)
     echo "unknown target architecture %{_arch}"
@@ -61,6 +63,7 @@ cp *.pc %{buildroot}%{_libdir}/pkgconfig
 %{_libdir}/*.so.*
 
 %files devel
+%{_includedir}/*.h
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
