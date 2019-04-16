@@ -10,6 +10,15 @@ debdir=debian
 debsrc=$debdir/source
 quiltconf=$HOME/.quiltrc-dpkg
 
+p=`uname -p`
+case $p in
+	x86_64) ;;
+	*)
+		echo "No suitable version of libaltaircamlegacy for $p"
+		exit 1
+		;;
+esac
+
 debversion=`cat /etc/debian_version`
 case $debversion in
 	jessie/sid)
