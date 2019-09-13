@@ -2,7 +2,7 @@
 
 Name:           libaltaircamlegacy
 Version:        1.24.11330
-Release:        0
+Release:        1
 Summary:        Legay Altair camera support library
 License:	GPLv2+
 Prefix:         %{_prefix}
